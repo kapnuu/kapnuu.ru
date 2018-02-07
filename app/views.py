@@ -7,9 +7,10 @@ def index():
     html = '<h3>kapnuu.ru</h3>'
     try:
         html += '<pre>'
-        for h in request.headers:
-            html += '%s: %s\n' % (h, request.headers[h])
-        html += '</pre>this will be <strong>kapnuu</strong> personal site'
+        html += str(request.headers)
+        #for h in request.headers:
+        #    html += '%s: %s\n' % (h, request.headers[h])
+        html += '</pre>this will be <strong>kapnuu</strong> personal site'       
     except Exception as ex:
         print('%s' % ex)
     return html

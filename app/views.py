@@ -8,7 +8,7 @@ def index():
     try:
         html += '<pre>'
         for h in request.headers:
-            html += h + ': ' + request.headers[h] + '\n'
+            html += '%s: %s\n' % (h, request.headers[h])
         html += '</pre>this will be <strong>kapnuu</strong> personal site'
     except Exception as ex:
         print('%s' % ex)

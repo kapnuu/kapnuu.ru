@@ -1,1 +1,1 @@
-web: gunicorn run-heroku:app --log-file -
+web: python run-heroku.py

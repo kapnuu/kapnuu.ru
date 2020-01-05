@@ -65,6 +65,8 @@ def index():
         cat = models.Cat.query.filter(models.Cat.id >= guest.last_cat_id).first()
     if cat is None:
         cat = models.Cat.query.order_by(models.Cat.id).first()
+    if cat is None:
+        return redirect('/create', 302)
 
     guest.t_seen = datetime.utcnow()
     guest.last_cat_id = cat.id

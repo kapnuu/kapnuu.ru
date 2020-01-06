@@ -63,7 +63,8 @@ def index():
     if guest.last_cat_id == -1:
         cat = models.Cat.query.filter(models.Cat.index >= 0).first()
     else:
-        cat = models.Cat.query.filter(models.Cat.index >= guest.last_cat_id).first()
+        last_seen = guest.last_cat_id if guest.last_cat_id is not None else -1
+        cat = models.Cat.query.filter(models.Cat.index >= last_seen).first()
     if cat is None:
         cat = models.Cat.query.order_by(models.Cat.index).first()
     if cat is None:

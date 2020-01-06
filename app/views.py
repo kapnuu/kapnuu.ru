@@ -1,5 +1,6 @@
+import os
 from app import app, db, models
-from flask import redirect, render_template, flash, url_for, request, make_response
+from flask import redirect, render_template, flash, request, make_response, send_from_directory
 import logging
 import random
 import string
@@ -121,3 +122,10 @@ def create_test_db():
 
     flash('New test DB created')
     return redirect('/')
+
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    logging.debug('Static: %s ' % filename)
+    root_dir = os.path.dirname(os.getcwd())
+    return send_from_directory(os.path.join(root_dir, 'static'), filename)

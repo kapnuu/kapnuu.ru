@@ -124,8 +124,7 @@ def create_test_db():
     return redirect('/')
 
 
-@app.route('/static/<path:filename>')
+@app.route('/static/<filename>')
 def serve_static(filename):
-    logging.debug('Static: %s ' % filename)
-    root_dir = os.path.dirname(os.getcwd())
-    return send_from_directory(os.path.join(root_dir, 'static'), filename)
+    logging.debug('Static: %s' % filename)
+    return send_from_directory(os.path.join(app.config.root_path, 'static'), filename)

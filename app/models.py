@@ -5,6 +5,7 @@ __author__ = 'pav'
 
 class Cat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    index = db.Column(db.Integer, index=True)
     url = db.Column(db.String(320))
     width = db.Column(db.Integer)
     height = db.Column(db.Integer)

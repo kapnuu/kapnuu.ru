@@ -31,7 +31,7 @@ def print_cats():
     cats = models.Cat.query.all()
 
     for c in cats:
-        logging.debug('%s %s' % (c.id, c.url))
+        logging.debug('%s %s' % (c.index, c.url))
 
 
 def get_guest(create_new=True):
@@ -61,16 +61,16 @@ def index():
     guest, cookie = get_guest()
 
     if guest.last_cat_id == -1:
-        cat = models.Cat.query.filter(models.Cat.id >= 0).first()
+        cat = models.Cat.query.filter(models.Cat.index >= 0).first()
     else:
-        cat = models.Cat.query.filter(models.Cat.id >= guest.last_cat_id).first()
+        cat = models.Cat.query.filter(models.Cat.index >= guest.last_cat_id).first()
     if cat is None:
-        cat = models.Cat.query.order_by(models.Cat.id).first()
+        cat = models.Cat.query.order_by(models.Cat.index).first()
     if cat is None:
         return redirect('/create', 302)
 
     guest.t_seen = datetime.utcnow()
-    guest.last_cat_id = cat.id
+    guest.last_cat_id = cat.index
     db.session.add(guest)
     db.session.commit()
 
@@ -105,16 +105,16 @@ def create_test_db():
     for x in models.Cat.query.all():
         db.session.delete(x)
 
-    cat = models.Cat(url='/static/DSC_0407.jpg',
+    cat = models.Cat(url='/static/DSC_0407.jpg', index=0,
                      width=415, height=620, disabled=False, comment='cat #0')
     db.session.add(cat)
-    cat = models.Cat(url='/static/DSC_0389.jpg',
+    cat = models.Cat(url='/static/DSC_0389.jpg', index=1,
                      width=415, height=620, disabled=False, comment='cat #1')
     db.session.add(cat)
-    cat = models.Cat(url='/static/DSC_0424.jpg',
+    cat = models.Cat(url='/static/DSC_0424.jpg', index=2,
                      width=415, height=620, disabled=False, comment='cat #2')
     db.session.add(cat)
-    cat = models.Cat(url='/static/DSC_2105.jpg',
+    cat = models.Cat(url='/static/DSC_2105.jpg', index=3,
                      width=620, height=415, disabled=False, comment='cat #3')
     db.session.add(cat)
     db.session.commit()

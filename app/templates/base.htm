@@ -15,7 +15,7 @@
 		</div>
 		<h1>Алёшка.site</h1>
 	</header>
-	<hr />
+	<!-- hr / -->
 	{%- with messages = get_flashed_messages(with_categories=true) -%}
 	{%- if messages -%}
 	<ul class="flashes">
@@ -27,6 +27,5 @@
 	{%- endwith -%}
 	{% block content %}{% endblock %}
 	</div>
-	<!-- footer>-{{cat}}-</footer -->
 </body>
 </html>

@@ -103,8 +103,12 @@ def next_cat():
 
 @app.route('/create')
 def create_test_db():
-    for x in models.Cat.query.all():
-        db.session.delete(x)
+    engine = db.get_engine(app)
+    try:
+        engine.execute('TRUNCATE TABLE cat;')
+    except Exception as ex:
+        logging.error('Truncate `cat` table failed: %s' % ex)
+        engine.execute('DELETE FROM cat;')
 
     cat = models.Cat(url='/static/DSC_0407.jpg', index=0,
                      width=415, height=620, disabled=False, comment='cat #0')
@@ -127,6 +131,4 @@ def create_test_db():
 
 @app.route('/static/<filename>')
 def serve_static(filename):
-    # logging.debug('Static: %s' % filename)
-    # logging.debug(os.listdir(os.path.join(app.config.root_path, 'static')))
     return send_from_directory(os.path.join(app.config.root_path, 'static'), filename)

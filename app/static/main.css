@@ -3,14 +3,36 @@ body {
     font-family: calibri;
     padding: 0;
     margin: 10px 10px;
+    background: #696969;
+    background: radial-gradient(#696969, black);
 }
 
 .cat-pic img {
-    border: 1px solid gray;
     padding: 1px;
-    max-height: 90%;
+    height: auto;
+    max-width: 100%;
 }
 
 h1 {
-    font-size: 1.4em;
+    font-size: 1.6em;
+}
+
+header {
+    color: #c0c0c0;
+}
+
+.comment {
+    text-align: center;
+    color: #c0c0c0;
+}
+
+a {
+    color: #696969;
+}
+
+.flash-message {
+    border: 1px solid #696969;
+    border-radius: 4px;
+    background-color: #c0c0c0;
+    padding: 6px;
 }

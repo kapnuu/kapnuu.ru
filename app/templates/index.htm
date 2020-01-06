@@ -1,6 +1,5 @@
 {% extends "base.htm" %}
 {% block content %}
-<span>{% if cat.comment %}{{cat.comment}}{% endif %}</span>
 <form id="kittie" action="/cat/next" method="POST">
   <div class="cat-pic" align="center">
       <a href="/" onclick="document.getElementById('kittie').submit(); return false;"><img id="cat" src="{{cat.url}}" />
@@ -8,4 +7,5 @@
       </a>
   </div>
 </form>
+{% if cat.comment %}<div class="comment">{{cat.comment}}</div>{% endif %}
 {% endblock %}

@@ -1,11 +1,16 @@
 {% extends "base.htm" %}
 {% block content %}
 <form id="kittie" action="/cat/next" method="POST">
-  <div class="cat-pic" align="center">
-      <a href="/" onclick="document.getElementById('kittie').submit(); return false;"><img id="cat" src="{{cat.url}}" />
-          <br />
+  <div align="center">
+      <a href="/" onclick="document.getElementById('kittie').submit(); return false;">
+            <div style="background:url({{cat.url}}) no-repeat center center; height: {{cat.height}}px; -webkit-background-size: contain;
+-moz-background-size: contain; -o-background-size: contain; background-size: contain;">
+                &nbsp;
+            </div>
       </a>
   </div>
+
+
 </form>
 {% if cat.comment %}<div class="comment">{{cat.comment}}</div>{% endif %}
 {% endblock %}

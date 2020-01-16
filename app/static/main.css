@@ -7,14 +7,26 @@ body {
     background: radial-gradient(#696969, black);
 }
 
-.cat-pic img {
+/*.cat-pic img {
     padding: 1px;
     height: auto;
     max-width: 100%;
+}*/
+
+.cat-pic {
+  max-width: 100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
     font-size: 1.6em;
+}
+
+.text {
+    color: #c0c0c0;
+    display: inline;
 }
 
 header {
@@ -28,6 +40,11 @@ header {
 
 a {
     color: #696969;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .flash-message {
@@ -35,4 +52,13 @@ a {
     border-radius: 4px;
     background-color: #c0c0c0;
     padding: 6px;
+}
+
+.cat-preview {
+    margin-bottom: 4px;
+}
+
+.cat-preview textarea,
+.cat-preview input {
+    vertical-align: top;
 }

@@ -13,7 +13,7 @@
 			<a href="/create" style="float: right;">Create new DB</a>
 			<!--a href="/">Home</a> |-->
 		</div>
-		<h1>Алёшка.site</h1>
+		<h1>Алёшка.site{% if url_for(request.endpoint) != '/index' %} | <a href="/">go to main</a>{% endif %}</h1>
 	</header>
 	<!-- hr / -->
 	{%- with messages = get_flashed_messages(with_categories=true) -%}
@@ -27,5 +27,5 @@
 	{%- endwith -%}
 	{% block content %}{% endblock %}
 	</div>
-</body>
+s</body>
 </html>

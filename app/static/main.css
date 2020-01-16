@@ -1,10 +1,14 @@
+html, body {
+  height: 100%;
+}
+
 body {
     font-size: 90%;
     font-family: calibri;
     padding: 0;
     margin: 10px 10px;
     background: #696969;
-    background: radial-gradient(#696969, black);
+    background: radial-gradient(#696969, black) /*no-repeat*/;
 }
 
 h1 {
@@ -23,6 +27,7 @@ header {
 .comment {
     text-align: center;
     color: #c0c0c0;
+    margin-bottom: 4px;
 }
 
 a {

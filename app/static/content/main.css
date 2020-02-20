@@ -1,0 +1,132 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    background: #696969;
+    background: radial-gradient(#696969, black) /*no-repeat*/;
+    font-size: 90%;
+    font-family: calibri;
+    padding: 0 24px;
+    margin: 10px 10px;
+}
+
+h1 {
+    font-size: 2.4em;
+    text-align: center;
+}
+
+.text {
+    color: #c0c0c0;
+    display: inline;
+}
+
+header {
+    color: #c0c0c0;
+}
+
+.comment {
+    text-align: center;
+    color: #c0c0c0;
+    margin-bottom: 4px;
+}
+
+a {
+    color: #696969;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    background: 1px solid black;
+    border-radius: 4px;
+    background-color: #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.alert-error {
+    background-color: #ff979a;
+    border: 1px solid #7a6365;
+}
+
+.alert-success a {
+    color: #468847;
+    font-weight: bolder;
+}
+
+.cat-preview {
+    margin-bottom: 12px;
+}
+
+.cat-preview img {
+    border-radius: 3px;
+}
+
+.cat-preview textarea,
+.cat-preview input {
+    vertical-align: top;
+}
+
+.login {
+    margin: 20px auto;
+    width: 300px;
+}
+
+.login-screen {
+    background: #696969;
+    background: radial-gradient(#696969, black) /*no-repeat*/;
+    padding: 20px;
+    border-radius: 5px;
+    color: #c0c0c0;
+}
+
+.login-form {
+    text-align: center;
+}
+
+.control-group {
+    margin-bottom: 10px;
+}
+
+.login-form input {
+    text-align: center;
+    width: 240px;
+    padding: 10px 0;
+}
+
+input, textarea {
+    background-color: #ECF0F1;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 200;
+    transition: border .5s;
+}
+
+input:focus, textarea:focus {
+    border: 2px solid #696969;
+    box-shadow: none;
+}
+
+.btn {
+    border: 2px solid transparent;
+    background: #696969;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 25px;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    transition: 0.25s;
+    display: block;
+    margin: 10px auto;
+}
+
+.btn:hover {
+    background-color: black;
+}

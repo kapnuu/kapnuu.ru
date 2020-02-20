@@ -1,12 +1,23 @@
-import os
 from app import app, db, models
-from flask import redirect, render_template, flash, request, make_response, send_from_directory
+from werkzeug.security import check_password_hash
+from flask import redirect, render_template, flash, request, make_response, send_from_directory, session
+from sqlalchemy import and_
 import logging
 import random
 import string
 from datetime import datetime
 
 COOKIE_NAME = 'kapnuu-cat'
+
+
+def verify_password(username, password):
+    print(app.config['ROOT'])
+    print(app.config['ROOT_PASSWORD'])
+    if username == app.config['ROOT']:
+        if check_password_hash(app.config['ROOT_PASSWORD'], password):
+            session['logged_in'] = True
+            return True
+    return False
 
 
 def get_cookie(req):
@@ -28,7 +39,7 @@ def new_cookie():
 
 
 def print_cats():
-    cats = models.Cat.query.all()
+    cats = models.Cat.query.filter(models.Cat.disabled == False).order_by(models.Cat.index).all()
 
     for c in cats:
         logging.debug('%s %s' % (c.index, c.url))
@@ -51,31 +62,60 @@ def get_guest(create_new=True):
     return guest, cookie
 
 
+def create_db():
+    engine = db.get_engine(app)
+    try:
+        engine.execute('TRUNCATE TABLE cat;')
+    except Exception as ex:
+        logging.error('Truncate `cat` table failed: %s' % ex)
+        engine.execute('DELETE FROM cat;')
+
+
+@app.route('/logout')
+def logout():
+    session['logged_in'] = False
+    return redirect('/')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if session.get('logged_in'):
+        return redirect('/')
+    if request.form:
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if verify_password(username, password):
+            session['logged_in'] = True
+            return redirect('/cat')
+        else:
+            flash('invalid username or password', category='error')
+    return render_template('login.htm')
+
+
 @app.route('/')
 @app.route('/index')
 def index():
-    logging.debug('index requested')
-
     print_cats()
 
     guest, cookie = get_guest()
 
     if guest.last_cat_id == -1:
-        cat = models.Cat.query.filter(models.Cat.index >= 0).first()
+        cat = models.Cat.query.filter(and_(models.Cat.disabled == False, models.Cat.index >= 0)).first()
     else:
         last_seen = guest.last_cat_id if guest.last_cat_id is not None else -1
-        cat = models.Cat.query.filter(models.Cat.index >= last_seen).first()
+        cat = models.Cat.query.filter(and_(models.Cat.disabled == False, models.Cat.index >= last_seen)).order_by(models.Cat.index).first()
     if cat is None:
-        cat = models.Cat.query.order_by(models.Cat.index).first()
+        cat = models.Cat.query.filter(models.Cat.disabled == False).order_by(models.Cat.index).first()
     if cat is None:
-        return redirect('/create', 302)
+        flash('there is nobody here :-(')
+        return redirect('/login')
 
     guest.t_seen = datetime.utcnow()
     guest.last_cat_id = cat.index
     db.session.add(guest)
     db.session.commit()
 
-    resp = make_response(render_template('index.htm', cat=cat, cookie=cookie))
+    resp = make_response(render_template('index.htm', cat=cat, cookie=cookie, logged_in=session.get('logged_in')))
     resp.set_cookie(COOKIE_NAME, cookie)
     return resp
 
@@ -101,14 +141,66 @@ def next_cat():
     return redirect('/')
 
 
+@app.route('/cat', methods=['GET'])
+def list_cats():
+    if not session.get('logged_in'):
+        return redirect('/login')
+
+    cats = models.Cat.query.order_by(models.Cat.index).all()
+    return render_template('list.htm', cats=cats, logged_in=session.get('logged_in'))
+
+
+@app.route('/cat', methods=['POST'])
+def update_cats():
+    if not session.get('logged_in'):
+        return redirect('/login')
+
+    cats = {}
+    data = request.values
+    indices = [x for x in data if x.startswith('cat_idx')]
+    for datum in indices:
+        cat_id = datum[7:]
+        cat = {
+            'comment': data.get('cat_comment' + cat_id),
+            'idx': int(data[datum]),
+            'enabled': bool(data.get('cat_enable' + cat_id))
+        }
+        cats[int(cat_id)] = cat
+
+    new_cat = data.get('cat_new')
+    if new_cat:
+        cat = {
+            'comment': '',
+            'idx': max([int(data[x]) for x in indices]) + 1,
+            'enabled': True,
+            'url': new_cat,
+        }
+        cats[0] = cat
+
+    # logging.debug([x + ' -> ' + data[x] for x in data])
+    logging.debug(cats)
+    return redirect('/cat')
+
+
 @app.route('/create')
+def create_new_db():
+    if not session.get('logged_in'):
+        return redirect('/login')
+
+    create_db()
+
+    logging.debug('New DB created')
+
+    flash('new db created')
+    return redirect('/cat')
+
+
+@app.route('/create-test')
 def create_test_db():
-    engine = db.get_engine(app)
-    try:
-        engine.execute('TRUNCATE TABLE cat;')
-    except Exception as ex:
-        logging.error('Truncate `cat` table failed: %s' % ex)
-        engine.execute('DELETE FROM cat;')
+    if not session.get('logged_in'):
+        return redirect('/login')
+
+    create_db()
 
     cat = models.Cat(url='/static/DSC_0407.jpg', index=0,
                      width=415, height=620, disabled=False, comment='cat #0')
@@ -123,12 +215,8 @@ def create_test_db():
                      width=620, height=415, disabled=False, comment='cat #3')
     db.session.add(cat)
     db.session.commit()
-    logging.debug('New test DB created')
 
-    flash('New test DB created')
+    logging.debug('Test DB created')
+
+    flash('test db created')
     return redirect('/')
-
-
-@app.route('/static/<filename>')
-def serve_static(filename):
-    return send_from_directory(os.path.join(app.config.root_path, 'static'), filename)

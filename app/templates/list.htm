@@ -1,0 +1,19 @@
+{% extends "base.htm" %}
+{% block content %}
+<form action="/cat" method="POST">
+{% for cat in cats %}<div class="cat-preview">
+    <input name="cat_enable{{cat.id}}" type="checkbox" {% if not cat.disabled %}checked{% endif %} />
+    <input name="cat_idx{{cat.id}}" type="text" value="{{cat.index}}" size="2" />
+    <img id="cat_img{{cat.id}}" style="max-width: 160px;" src="{{cat.url}}" />
+    <textarea id="cat_comment{{cat.id}}" name="cat_comment{{cat.id}}" cols="40">{{cat.comment}}</textarea>
+    <br />
+</div>{% endfor %}
+<div class="text">Add new:</div> <input type="text" name="cat_new" size="48" />
+<br />
+<br />
+<input type="submit" class="btn" style="padding: 12px 24px;" />
+</form>
+<script language="javascript" type="text/javascript">{% for cat in cats %}
+document.getElementById("cat_comment{{cat.id}}").style.height = (document.getElementById("cat_img{{cat.id}}").clientHeight - 6) + "px";{% endfor %}
+</script>
+{% endblock %}

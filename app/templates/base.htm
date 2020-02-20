@@ -4,25 +4,38 @@
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width; initial-scale=1">
     <title>Алёшка.site — сайт Алексея</title>
-	<link rel="stylesheet" href="/static/main.css">
-	<!--script type="text/javascript" src="/static/main.js"></script-->
+	<link rel="stylesheet" href="/static/content/main.css">
 </head>
 <body>
 	<header>
+		{% if logged_in %}
 		<div style="width:100%;">
-			<a href="/create" style="float: right;">Create new DB</a>
-			<!--a href="/">Home</a> |-->
+			<span style="float: right;">
+				<a href="/" style="">main</a> |
+				<a href="/cat" style="">aleshkas</a> |
+				<a href="/logout" style="">logout</a> &nbsp; &nbsp; &nbsp; &nbsp;
+				<a href="/create-test" style="">create test db</a> |
+				<a href="/create" style="">create new db</a>
+			</span>
 		</div>
-		<h1>Алёшка.site{% if url_for(request.endpoint) != '/index' %} | <a href="/">go to main</a>{% endif %}</h1>
+		{% else %}
+		{%- if request.path=='/login' %}
+		<div style="width:100%;">
+			<span style="float: right;">
+				<a href="/" style="">main</a>
+			</span>
+		</div>
+		{% endif %}
+		{% endif %}
+		<h1>Алёшка.site</h1>
 	</header>
-	<!-- hr / -->
 	{%- with messages = get_flashed_messages(with_categories=true) -%}
 	{%- if messages -%}
-	<ul class="flashes">
 	{% for category, message in messages %}
-		<li class="flash-{{ category }}">{{ message|safe }}</li>
+	<div class="alert alert-{{category}}">
+		{{ message|safe }}
+	</div>
 	{% endfor %}
-	</ul>
 	{%- endif -%}
 	{%- endwith -%}
 	{% block content %}{% endblock %}

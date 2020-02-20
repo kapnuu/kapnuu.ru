@@ -25,3 +25,5 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 ROOT = os.getenv('ROOT')
 if ROOT:
     ROOT_PASSWORD = generate_password_hash(os.getenv('ROOT_PASSWORD'))
+else:
+    ROOT_PASSWORD = None

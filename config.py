@@ -23,4 +23,5 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 
 ROOT = os.getenv('ROOT')
-ROOT_PASSWORD = generate_password_hash(os.getenv('ROOT_PASSWORD'))
+if ROOT:
+    ROOT_PASSWORD = generate_password_hash(os.getenv('ROOT_PASSWORD'))
